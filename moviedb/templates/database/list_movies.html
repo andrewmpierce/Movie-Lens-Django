@@ -1,0 +1,28 @@
+{% extends "base.html"%}
+{% block content %}
+<br>
+<br>
+
+{% for movie in movies %}
+    {{ movie.title }}<br />
+    {{ movie.average_rating }}<br />
+    <br>
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if movies.has_previous %}
+            <a href="?page={{ movies.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ movies.number }} of {{ movies.paginator.num_pages }}.
+        </span>
+
+        {% if movies.has_next %}
+            <a href="?page={{ movies.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

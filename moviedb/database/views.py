@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.db.models import Avg, Count
 from .models import Movie, Rater, Rating
 from users.forms import RatingForm
@@ -63,3 +63,20 @@ def most_viewed(request):
                   'database/most_pop.html',
                   {'popular_movies': popular_movies,
                   })
+
+
+def list_movies(request):
+    top_movies = popular_movies = Movie.objects.all().annotate(num_ratings=Count('rating')) \
+                                  .filter(num_ratings__gte=50)
+
+    top_movies = popular_movies.annotate(Avg('rating__stars')) \
+                           .order_by('-rating__stars__avg')
+    paginator = Paginator(top_movies, 20)
+    page = request.GET.get('page')
+    try:
+        movies = paginator.page('page')
+    except PageNotAnInteger:
+        movies = paginator.page(1)
+    except EmptyPage:
+        movies = paginator.page(paginator.num_pages)
+    return render_to_response('database/list_movies.html', {"movies":movies})
