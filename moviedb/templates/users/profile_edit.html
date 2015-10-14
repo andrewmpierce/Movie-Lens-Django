@@ -17,26 +17,10 @@
   <ul>
     {% for rating in ratings %}
     <li><a href="{% url 'movie_detail' rating.movie.pk %}"> {{rating.movie.title}}</a>: {{rating.stars}} Stars<li>
+      <a href="{% url 'movie_detail' rating.movie.pk %}"> Edit Rating</a>
       <br>
-      <input type="hidden" name="movie" value={{rating.movie.pk}}>
-      <input type="radio" name="rating" value="1" >1 Star
-      <br>
-      <input type="radio" name="rating" value="2">2 Stars
-      <br>
-      <input type="radio" name="rating" value="3">3 Stars
-      <br>
-      <input type="radio" name="rating" value="4">4 Stars
-      <br>
-      <input type="radio" name="rating" value="5">5 Stars
-      <br>
-      <input type="radio" name="rating" value="delete">Delete rating
-      <br>
-      Enter an optional short text review (under 140 characters)
-      <br>
-      <input type="text" name="text" style="width: 140;">
-      <br>
+      <a href="{% url 'movie_detail' rating.movie.pk %}"> Delete Rating</a>
 
-      <input type="submit" value="Edit Rating">
       {% endfor %}
     </ul>
 </form>

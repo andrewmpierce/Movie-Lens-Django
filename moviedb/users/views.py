@@ -41,7 +41,7 @@ def user_register(request):
             pass
         login(request, user)
         return render(request,
-                    'users/profile_detail.html',
+                    'users/profile_edit.html',
                     {'rater': user_r,
                     'ratings': ratings})
     else:
@@ -61,12 +61,16 @@ def user_login(request):
         for rating in user_r.rater.rating_set.all():
             ratings.append({'movie':rating.movie,
                         'stars': rating.stars})
+        #import pdb; pdb.set_trace()
         if request.user.is_active:
             login(request, user)
+            # return redirect(reverse('profile_edit')+"?rater={}&profile={}&rating={}".format(rater, profile, ratings))
+            # # , kwargs={'rater':rater,
+            # # 'profile': profile,
+            # # 'rating': ratings}))
             return render(request,
                         'users/profile_edit.html',
                         {'rater':rater,
-                        'user':user_r,
                         'profile': profile,
                         'ratings': ratings})
         else:
@@ -99,6 +103,7 @@ def user_logout(request):
 
 @login_required
 def edit_profile(request):
+    #import pdb; pdb.set_trace()
     try:
         profile = request.user.profile
     except Profile.DoesNotExist:
@@ -106,7 +111,7 @@ def edit_profile(request):
 
     if request.method == 'GET':
         profile_form = ProfileForm(instance=profile)
-    elif request.method == 'POST':
+    if request.method == 'POST':
         rating = Rating.objects.get(rater=request.profile.user.rater, movie= request.POST['movie'])
         if request.POST['rating'] == 'delete':
             del rating
@@ -119,5 +124,4 @@ def edit_profile(request):
             profile_form.save()
             messages.add_message(request, messages.SUCCESS, 'Your profile has been updated')
 
-    return render(request, 'users/profile_edit.html', {'form': profile_form
-                                                        })
+    return render(request, 'users/profile_edit.html')

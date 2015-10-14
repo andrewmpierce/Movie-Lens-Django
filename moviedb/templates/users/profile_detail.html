@@ -1,20 +1,41 @@
 {% extends "base.html" %}
+
+{% block title %}Edit rating for: {{ movie.title }}{% endblock %}
+
 {% block content %}
+<h1>Edit rating for: {{ movie.title }}</h1>
 
-<h2> {{ profile.user.username }}'s  profile</h2>
-
-{% if user == profile.user %}
-  <p> Age: {{rater.age}} </p>
-  <p> Gender: {{rater.gender}} </p>
-  <p> Occupation: {{rater.occupation}} </p>
-  <p> Zip-Code: {{rater.zipcode}} </p>
-<input type="submit" value="Edit">
-  <h3> All Rated Movies </h3>
-  <ul>
-    {% for rating in ratings %}
-    <li><a href="{% url 'movie_detail' rating.movie.pk %}"> {{rating.movie.title}}</a>: {{rating.stars}} Stars<li>
-      {% endfor %}
-    </ul>
-
-{% endif %}
+<p>
+  <a href="{% url 'movie_detail' rating.movie.pk %}"
+      >{{ movie.title }}</a> {{ rating.stars }}&#9733; <small
+      >({{ rating.timestamp }})</small>
+      {% if rating.text %}
+      <span class="text">{{ rating.text }}</span>
+      {% endif %}
+</p>
+<form method="POST" action="{% url 'edit_rating' user.rater.pk movie.pk  %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Submit New Rating">
+</form>
 {% endblock %}
+
+
+<br>
+<input type="hidden" name="movie" value={{rating.movie.pk}}>
+<input type="radio" name="rating" value="1" >1 Star
+<br>
+<input type="radio" name="rating" value="2">2 Stars
+<br>
+<input type="radio" name="rating" value="3">3 Stars
+<br>
+<input type="radio" name="rating" value="4">4 Stars
+<br>
+<input type="radio" name="rating" value="5">5 Stars
+<br>
+<input type="radio" name="rating" value="delete">Delete rating
+<br>
+Enter an optional short text review (under 140 characters)
+<br>
+<input type="text" name="text" style="width: 140;">
+<br>

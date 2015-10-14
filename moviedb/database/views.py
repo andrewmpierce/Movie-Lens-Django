@@ -16,10 +16,13 @@ def movie_detail(request, movie_id):
                 if form.is_valid():
                         try:
                             rating = Rating.objects.get(rater=request.user.rater, movie=movie)
-                            rating.stars=request.POST['rating']
-                            rating.text=request.POST['text']
-                            rating.timestamp=datetime.now()
-                            rating.save()
+                            if request.POST['rating'] == 'delete':
+                                del rating
+                            else:
+                                rating.stars=request.POST['rating']
+                                rating.text=request.POST['text']
+                                rating.timestamp=datetime.now()
+                                rating.save()
                         except:
                              Rating.create_rating(movie=movie, rater=request.user.rater, stars=request.POST['rating'], text=request.POST['text'], timestamp=datetime.now().strftime('%Y-%m-%d %H:%M'))
         else:

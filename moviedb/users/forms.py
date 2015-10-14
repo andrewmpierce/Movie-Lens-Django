@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
-
+from database.models import Rating
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -11,11 +11,13 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password')
 
 
-class RatingForm(forms.Form):
-    rating = forms.IntegerField(label='Rating')
-
-
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('favorite_movie', 'ratings')
+
+
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ['stars', 'text']
