@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h1> {{ movie.title }} </h1>
+<form method="POST">
+  {% csrf_token %}
+
+<input type="radio" name="rating" value="1" >1 Star
+<br>
+<input type="radio" name="rating" value="2">2 Stars
+<br>
+<input type="radio" name="rating" value="3">3 Stars
+<br>
+<input type="radio" name="rating" value="4">4 Stars
+<br>
+<input type="radio" name="rating" value="5">5 Stars
+<br>
+<input type="radio" name="rating" value="6">Delete rating
+<br>
+Enter an optional short text review (under 140 characters)
+<br>
+<input type="text" name="text" style="width: 140;">
+<input type="submit" value="Submit">
+
+{% endblock %}

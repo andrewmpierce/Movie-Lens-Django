@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import UserForm, ProfileForm
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
@@ -41,7 +42,7 @@ def user_register(request):
             pass
         login(request, user)
         return render(request,
-                    'users/profile_edit.html',
+                    'users/register.html',
                     {'rater': user_r,
                     'ratings': ratings})
     else:
@@ -54,25 +55,17 @@ def user_login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        user_r = User.objects.get(username=username)
-        rater = Rater.objects.get(pk=user_r.pk)
-        profile = user_r.profile
-        ratings = []
-        for rating in user_r.rater.rating_set.all():
-            ratings.append({'movie':rating.movie,
-                        'stars': rating.stars})
+        rater = Rater.objects.get(pk=user.pk)
+        profile = user.profile
         #import pdb; pdb.set_trace()
-        if request.user.is_active:
+        if request.user:
             login(request, user)
-            # return redirect(reverse('profile_edit')+"?rater={}&profile={}&rating={}".format(rater, profile, ratings))
-            # # , kwargs={'rater':rater,
-            # # 'profile': profile,
-            # # 'rating': ratings}))
-            return render(request,
-                        'users/profile_edit.html',
-                        {'rater':rater,
-                        'profile': profile,
-                        'ratings': ratings})
+            # return render(request,
+            #             'users/login.html',
+            #             {'username':username,
+            #             'profile': profile,
+            #             'ratings': ratings})
+            return HttpResponseRedirect(reverse('profile_edit', kwargs={'user_id': user.pk}))
         else:
             return render(request,
                       'users/login.html',
@@ -102,13 +95,15 @@ def user_logout(request):
 #                 'ratings': ratings})
 
 @login_required
-def edit_profile(request):
+def edit_profile(request, user_id):
     #import pdb; pdb.set_trace()
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile(user=request.user)
-
+    profile = Profile.objects.get(pk=user_id)
+    user = User.objects.get(pk=user_id)
+    rater = Rater.objects.get(pk=user.pk)
+    ratings = []
+    for rating in rater.rating_set.all():
+        ratings.append({'movie':rating.movie,
+                    'stars': rating.stars})
     if request.method == 'GET':
         profile_form = ProfileForm(instance=profile)
     if request.method == 'POST':
@@ -124,4 +119,28 @@ def edit_profile(request):
             profile_form.save()
             messages.add_message(request, messages.SUCCESS, 'Your profile has been updated')
 
-    return render(request, 'users/profile_edit.html')
+    return render(request, 'users/profile_edit.html', {'rater':rater,
+    'profile': profile,
+    'ratings': ratings})
+
+def edit_rating(request, movie_id):
+    movie = Movie.objects.get(pk=movie_id)
+    if request.method == 'POST':
+        if request.user.is_authenticated():
+            #import pdb; pdb.set_trace()
+            form = RatingForm(request.POST)
+            #if form.is_valid():
+            rating = Rating.objects.get(rater=request.user.rater, movie=movie)
+            if request.POST['rating'] == '6':
+                rating.delete()
+            else:
+                rating.stars=request.POST['rating']
+                rating.text=request.POST['text']
+                rating.timestamp=datetime.now()
+                rating.save()
+
+        else:
+            return redirect("http://127.0.0.1:8000/users/login")
+    return render(request,
+                  'users/edit_rating.html',
+                  {'movie':movie})

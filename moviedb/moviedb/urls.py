@@ -21,6 +21,6 @@ from users import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'users', include('users.urls')),
+    url(r'users/', include('users.urls')),
     url(r'', include('database.urls'))
     ]

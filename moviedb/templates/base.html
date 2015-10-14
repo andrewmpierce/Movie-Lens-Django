@@ -6,13 +6,9 @@
 <html>
 
 <body>
-    {% if request.user.is_authenticated %}
-    Logged in as {{ user.username }} - <a href="{% url 'top_twenty' %}"></a>
+    Logged in as {{ user.username|default:"Guest" }} - <a href="{% url 'top_twenty' %}"></a>
     <a href="{% url 'logout' %}">Logout</a> -
-    <a href="{% url 'profile_edit' %}">Edit Profile</a>
-    {% else %}
     <a href="{% url 'login'%}?next={{request.path}}">Login</a>
-    {% endif %}
     {% block content %}
     {% endblock %}
 </body>

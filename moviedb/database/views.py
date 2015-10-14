@@ -4,6 +4,7 @@ from .models import Movie, Rater, Rating
 from users.forms import RatingForm
 from django import forms
 from datetime import datetime
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 
@@ -16,7 +17,7 @@ def movie_detail(request, movie_id):
                 if form.is_valid():
                         try:
                             rating = Rating.objects.get(rater=request.user.rater, movie=movie)
-                            if request.POST['rating'] == 'delete':
+                            if request.POST['rating'] == '6':
                                 del rating
                             else:
                                 rating.stars=request.POST['rating']

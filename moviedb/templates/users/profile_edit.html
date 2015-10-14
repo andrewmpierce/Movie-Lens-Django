@@ -8,18 +8,18 @@
 <form method="POST">
   {% csrf_token %}
   {{ form.as_p }}
-  <p> Age: {{rater.age}} </p>
-  <p> Gender: {{rater.gender}} </p>
-  <p> Occupation: {{rater.occupation}} </p>
-  <p> Zip-Code: {{rater.zipcode}} </p>
+  <p> Age: {{user.rater.age}} </p>
+  <p> Gender: {{user.rater.gender}} </p>
+  <p> Occupation: {{user.rater.occupation}} </p>
+  <p> Zip-Code: {{user.rater.zipcode}} </p>
 
   <h3> All Rated Movies </h3>
   <ul>
     {% for rating in ratings %}
     <li><a href="{% url 'movie_detail' rating.movie.pk %}"> {{rating.movie.title}}</a>: {{rating.stars}} Stars<li>
-      <a href="{% url 'movie_detail' rating.movie.pk %}"> Edit Rating</a>
+      <a href="{% url 'edit_rating' rating.movie.pk %}"> Edit Rating</a>
       <br>
-      <a href="{% url 'movie_detail' rating.movie.pk %}"> Delete Rating</a>
+
 
       {% endfor %}
     </ul>
