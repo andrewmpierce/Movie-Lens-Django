@@ -1,0 +1,4 @@
+Django
+fake-factory
+psycopg2
+django-bootstrap3

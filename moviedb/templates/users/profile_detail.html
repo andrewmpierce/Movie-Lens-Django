@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2> {{ profile.user.username }}'s  profile</h2>
+
+{% if user == profile.user %}
+  <p> Age: {{rater.age}} </p>
+  <p> Gender: {{rater.gender}} </p>
+  <p> Occupation: {{rater.occupation}} </p>
+  <p> Zip-Code: {{rater.zipcode}} </p>
+<input type="submit" value="Edit">
+  <h3> All Rated Movies </h3>
+  <ul>
+    {% for rating in ratings %}
+    <li><a href="{% url 'movie_detail' rating.movie.pk %}"> {{rating.movie.title}}</a>: {{rating.stars}} Stars<li>
+      {% endfor %}
+    </ul>
+
+{% endif %}
+{% endblock %}

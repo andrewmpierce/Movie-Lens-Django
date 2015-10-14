@@ -1,0 +1,7 @@
+<h1> Top Twenty Movies with 50 or more Ratings </h1>
+
+<ul>
+  {% for movie in movies %}
+  <li><a href="{% url 'movie_detail' movie.pk %}"> {{movie.title}}</a>: {{movie.average_rating | floatformat}}<li>
+    {% endfor %}
+  </ul>

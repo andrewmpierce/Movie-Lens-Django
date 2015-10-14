@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2> {{ profile.user.username }}'s  profile</h2>
+
+{% if user == profile.user %}
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <p> Age: {{rater.age}} </p>
+  <p> Gender: {{rater.gender}} </p>
+  <p> Occupation: {{rater.occupation}} </p>
+  <p> Zip-Code: {{rater.zipcode}} </p>
+
+  <h3> All Rated Movies </h3>
+  <ul>
+    {% for rating in ratings %}
+    <li><a href="{% url 'movie_detail' rating.movie.pk %}"> {{rating.movie.title}}</a>: {{rating.stars}} Stars<li>
+      <br>
+      <input type="hidden" name="movie" value={{rating.movie.pk}}>
+      <input type="radio" name="rating" value="1" >1 Star
+      <br>
+      <input type="radio" name="rating" value="2">2 Stars
+      <br>
+      <input type="radio" name="rating" value="3">3 Stars
+      <br>
+      <input type="radio" name="rating" value="4">4 Stars
+      <br>
+      <input type="radio" name="rating" value="5">5 Stars
+      <br>
+      <input type="radio" name="rating" value="delete">Delete rating
+      <br>
+      Enter an optional short text review (under 140 characters)
+      <br>
+      <input type="text" name="text" style="width: 140;">
+      <br>
+
+      <input type="submit" value="Edit Rating">
+      {% endfor %}
+    </ul>
+</form>
+{% endif %}
+
+{% endblock %}

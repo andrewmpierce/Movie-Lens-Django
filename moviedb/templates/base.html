@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+
+<body>
+    {% if user.is_authenticated %}
+    Logged in as {{ user.username }} - <a href="{% url 'top_twenty' %}"></a>
+    <a href="{% url 'logout' %}">Logout</a> -
+    <a href="{% url 'profile_edit' %}">Edit Profile</a>
+    {% else %}
+    <a href="{% url 'login'%}?next={{request.path}}">Login</a>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</body>
+</html?

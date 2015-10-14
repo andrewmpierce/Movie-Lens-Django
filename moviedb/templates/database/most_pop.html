@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+<center>
+<h1> Top Twenty Most Rated Movies </h1>
+
+<p>
+  {% for movie in popular_movies %}
+  <li><a href="{% url 'movie_detail' movie.pk %}"> {{movie.title}}</a>: {{ movie.num_ratings }} Ratings<li>
+    {% endfor %}
+</p>
+</center>
+{% endblock %}

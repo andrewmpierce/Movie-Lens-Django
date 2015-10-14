@@ -1,0 +1,14 @@
+<h1> {{ rater.user }} </h1>
+
+<p> User ID: {{rater.pk}} </p>
+<p> Age: {{rater.age}} </p>
+<p> Gender: {{rater.gender}} </p>
+<p> Occupation: {{rater.occupation}} </p>
+<p> Zip-Code: {{rater.zipcode}} </p>
+
+<h3> All Rated Movies </h3>
+<ul>
+  {% for rating in ratings %}
+  <li><a href="{% url 'movie_detail' rating.movie.pk %}"> {{rating.movie.title}}</a>: {{rating.stars}}<li>
+    {% endfor %}
+  </ul>
