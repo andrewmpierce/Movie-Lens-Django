@@ -5,6 +5,8 @@ from users.forms import RatingForm
 from django import forms
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic.base import TemplateView
+
 # Create your views here.
 
 
@@ -80,3 +82,14 @@ def list_movies(request):
     except EmptyPage:
         movies = paginator.page(paginator.num_pages)
     return render_to_response('database/list_movies.html', {"movies":movies})
+
+
+
+class HomePageView(TemplateView):
+
+    template_name = "database/home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(HomePageView, self).get_context_data(**kwargs)
+        context['five_movies'] = Movie.objects.all()[:5]
+        return context

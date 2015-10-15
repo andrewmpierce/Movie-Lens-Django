@@ -12,7 +12,7 @@
   <p> Gender: {{user.rater.gender}} </p>
   <p> Occupation: {{user.rater.occupation}} </p>
   <p> Zip-Code: {{user.rater.zipcode}} </p>
-
+<center>
   <h3> All Rated Movies </h3>
   <ul>
     {% for rating in ratings %}
@@ -22,8 +22,10 @@
 
 
       {% endfor %}
+
     </ul>
 </form>
+</center>
 {% endif %}
 
 {% endblock %}
